@@ -1,0 +1,12 @@
+#!/bin/bash -e
+
+# Install development gems if needed
+bundle check || bundle install
+
+# Ensure database is prepared
+./bin/rails db:prepare
+
+# Remove pre-existing server PID if present
+rm -f tmp/pids/server.pid
+
+exec "${@}"

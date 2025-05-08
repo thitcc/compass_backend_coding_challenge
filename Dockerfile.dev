@@ -1,0 +1,37 @@
+# Dockerfile.dev
+FROM ruby:2.7.7-slim
+
+# Set working directory
+WORKDIR /rails
+
+# Set Rails to run in development
+ENV RAILS_ENV=development \
+  BUNDLE_PATH="/usr/local/bundle" \
+  BUNDLE_WITHOUT=""
+
+# Install dependencies required for development
+RUN apt-get update -qq && \
+  apt-get install --no-install-recommends -y \
+  build-essential \
+  git \
+  libvips \
+  pkg-config \
+  libsqlite3-dev \
+  && rm -rf /var/lib/apt/lists /var/cache/apt/archives
+
+# Copy Gemfile and install dependencies
+COPY Gemfile Gemfile.lock ./
+RUN bundle install
+
+# Copy the rest of the application
+COPY . .
+
+# Make the dev entrypoint executable
+RUN chmod +x bin/docker-entrypoint-dev
+
+# Use the dev entrypoint
+ENTRYPOINT ["/rails/bin/docker-entrypoint-dev"]
+
+# Start the Rails server
+EXPOSE 3000
+CMD ["./bin/rails", "server", "-b", "0.0.0.0"]
