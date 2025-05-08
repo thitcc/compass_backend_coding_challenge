@@ -8,4 +8,5 @@
 #  updated_at :datetime         not null
 #
 class Location < ApplicationRecord
+  has_many :time_allocations, dependent: :destroy
 end

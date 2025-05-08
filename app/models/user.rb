@@ -8,5 +8,5 @@
 #  updated_at :datetime         not null
 #
 class User < ApplicationRecord
-  has_many :time_allocations
+  has_many :time_allocations, dependent: :destroy
 end

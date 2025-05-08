@@ -1,11 +1,11 @@
 class Api::V1::TimeAllocationSerializer < ActiveModel::Serializer
-  attributes :user_id, :location, :activity, :date
+  attributes :location, :activity, :date
 
   def location
     object.location&.name
   end
 
   def date
-    object.date.strftime('%Y-%m-%d')
+    object.formatted_date
   end
 end

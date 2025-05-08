@@ -1,15 +1,11 @@
 class Api::V1::CalendarController < Api::V1::BaseController
   before_action :set_user, only: [:index, :create]
   before_action :validate_date_params, only: [:index]
+  before_action :set_calendar_data, only: [:index]
 
   # GET /api/v1/users/:user_id/calendar?year=2023&month=4
   def index
-    start_date = Date.new(@year, @month, 1)
-    end_date = start_date.end_of_month
-
-    time_allocations = @user.time_allocations.where(date: start_date..end_date)
-
-    render json: time_allocations, each_serializer: Api::V1::TimeAllocationSerializer
+    render json: { calendar: @calendar_data }
   end
 
   def create
@@ -20,6 +16,10 @@ class Api::V1::CalendarController < Api::V1::BaseController
 
   def set_user
     @user = User.find(params[:user_id])
+  end
+
+  def set_calendar_data
+    @calendar_data = CalendarService.new(@user, @year, @month).generate_calendar
   end
 
   def validate_date_params
