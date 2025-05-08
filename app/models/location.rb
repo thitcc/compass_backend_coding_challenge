@@ -9,4 +9,5 @@
 #
 class Location < ApplicationRecord
   has_many :time_allocations, dependent: :destroy
+  validates :name, presence: true
 end

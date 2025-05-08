@@ -24,6 +24,9 @@ class TimeAllocation < ApplicationRecord
   belongs_to :user
   belongs_to :location
 
+  validates :activity, presence: true
+  validates :date, presence: true
+
   def formatted_date
     date&.strftime('%Y-%m-%d')
   end
